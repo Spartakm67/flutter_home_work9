@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_home_work9/repository/repository.dart';
+import 'package:flutter_home_work9/widgets/recipe_item.dart';
 
-class RecipeList extends StatelessWidget {
-  final List<String> items =
-  List.generate(50, (index) => 'Елемент ${index + 1}');
-
-  RecipeList({super.key});
+class RecipeListPage extends StatelessWidget {
+  const RecipeListPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+
+    final recipes = Repository.getAllRecipes();
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ListView.builder'),
+        title: const Text('Рецепти'),
       ),
       body: ListView.builder(
-        itemCount: items.length,
+        itemCount: recipes.length,
         itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(
-                items[index]
-            ),
-          );
+          final recipe = recipes[index];
+          return RecipeCard(recipe: recipe);
         },
       ),
       floatingActionButton: FloatingActionButton(
