@@ -9,7 +9,7 @@ class Recipe {
   final String category;
 
   Recipe({
-    FileImage? image,
+    AssetImage? image,
     required this.title,
     required this.description,
     required this.ingredients,

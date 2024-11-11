@@ -1,6 +1,6 @@
 import 'package:flutter_home_work9/models/recipe.dart';
 
-class Repository {
+class RecipeRepository {
   static final List<Recipe> recipes = [
     Recipe(
       title: 'Борщ',
@@ -40,5 +40,9 @@ class Repository {
 
   static List<Recipe> getRecipesByCategory(String category) {
     return recipes.where((recipe) => recipe.category == category).toList();
+  }
+
+  static void addRecipe(Recipe recipe) {
+    recipes.add(recipe);
   }
 }

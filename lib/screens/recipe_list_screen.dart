@@ -9,7 +9,7 @@ class RecipeListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final recipes = Repository.getAllRecipes();
+    final recipes = RecipeRepository.getAllRecipes();
 
     return Scaffold(
       appBar: AppBar(
