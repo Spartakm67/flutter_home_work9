@@ -13,6 +13,9 @@ class RecipeListPage extends StatefulWidget {
 
 class _RecipeListPageState extends State<RecipeListPage> {
   List<Recipe> recipes = [];
+  TextEditingController searchController = TextEditingController();
+  String searchRecipe = "";
+  String? selectedCategory;
 
   @override
   void initState() {
@@ -28,24 +31,78 @@ class _RecipeListPageState extends State<RecipeListPage> {
 
   @override
   Widget build(BuildContext context) {
+    final allRecipes = RecipeRepository.getAllRecipes();
+    final filteredRecipes = allRecipes.where((recipe) {
+      final matchesQuery = recipe.title.toLowerCase().contains(searchRecipe.toLowerCase());
+      final matchesCategory = selectedCategory == null || recipe.category == selectedCategory;
+      return matchesQuery && matchesCategory;
+    }).toList();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Рецепти'),
       ),
-      body: ListView.builder(
-        itemCount: recipes.length,
-        itemBuilder: (context, index) {
-          final recipe = recipes[index];
-          return RecipeCard(recipe: recipe);
-        },
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: searchController,
+              onChanged: (query) {
+                setState(() => searchRecipe = query);
+              },
+              decoration: const InputDecoration(
+                labelText: 'Пошук за назвою',
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: DropdownButton<String>(
+              value: selectedCategory,
+              hint: const Text("Обрати категорію"),
+              onChanged: (category) {
+                setState(() => selectedCategory = category);
+              },
+              isExpanded: true,
+              items: [
+                const DropdownMenuItem(
+                  value: null,
+                  child: Text("Усі категорії"),
+                ),
+                ...RecipeRepository.getAllCategories().map((category) {
+                  return DropdownMenuItem(
+                    value: category,
+                    child: Text(category),
+                  );
+                }),
+              ],
+            ),
+          ),
+          // Expanded(
+          //   child: ListView.builder(
+          //     itemCount: recipes.length,
+          //     itemBuilder: (context, index) {
+          //       final recipe = recipes[index];
+          //       return RecipeCard(recipe: recipe);
+          //     },
+          //   ),
+          // ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: filteredRecipes.length,
+              itemBuilder: (context, index) {
+                final recipe = filteredRecipes[index];
+                return RecipeCard(recipe: recipe);
+              },
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final result = await
-              Navigator.push(
-              context,
-              MaterialPageRoute(
-              builder: (_) => const RecipeForm()));
+          final result = await Navigator.push(
+              context, MaterialPageRoute(builder: (_) => const RecipeForm()));
 
           if (result == true) {
             _loadRecipes();

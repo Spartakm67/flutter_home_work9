@@ -45,4 +45,9 @@ class RecipeRepository {
   static void addRecipe(Recipe recipe) {
     recipes.add(recipe);
   }
+
+  static List<String> getAllCategories() {
+    final categories = recipes.map((recipe) => recipe.category).toSet().toList();
+    return categories;
+  }
 }
