@@ -54,8 +54,6 @@ class RecipeFormState extends State<RecipeForm> {
         SnackBar(content: Text('Рецепт "$recipeTitle" збережено!')),
       );
 
-
-
       _titleController.clear();
       _descriptionController.clear();
       _ingredientController.clear();
@@ -64,6 +62,7 @@ class RecipeFormState extends State<RecipeForm> {
         _selectedImage = null;
         _selectedCategory = null;
       });
+      Navigator.pop(context, true);
     }
   }
 
