@@ -33,10 +33,13 @@ class _RecipeListPageState extends State<RecipeListPage> {
   Widget build(BuildContext context) {
     final allRecipes = RecipeRepository.getAllRecipes();
     final filteredRecipes = allRecipes.where((recipe) {
-      final matchesQuery = recipe.title.toLowerCase().contains(searchRecipe.toLowerCase());
-      final matchesCategory = selectedCategory == null || recipe.category == selectedCategory;
+      final matchesQuery =
+          recipe.title.toLowerCase().contains(searchRecipe.toLowerCase());
+      final matchesCategory =
+          selectedCategory == null || recipe.category == selectedCategory;
       return matchesQuery && matchesCategory;
     }).toList();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Рецепти'),
@@ -50,9 +53,20 @@ class _RecipeListPageState extends State<RecipeListPage> {
               onChanged: (query) {
                 setState(() => searchRecipe = query);
               },
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Пошук за назвою',
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
+                suffixIcon: searchRecipe.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          setState(() {
+                            searchController.clear();
+                            searchRecipe = '';
+                          });
+                        },
+                      )
+                    : null,
               ),
             ),
           ),
@@ -79,15 +93,6 @@ class _RecipeListPageState extends State<RecipeListPage> {
               ],
             ),
           ),
-          // Expanded(
-          //   child: ListView.builder(
-          //     itemCount: recipes.length,
-          //     itemBuilder: (context, index) {
-          //       final recipe = recipes[index];
-          //       return RecipeCard(recipe: recipe);
-          //     },
-          //   ),
-          // ),
           Expanded(
             child: ListView.builder(
               itemCount: filteredRecipes.length,
