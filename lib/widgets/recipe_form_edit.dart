@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_home_work9/models/recipe.dart';
 import 'package:flutter_home_work9/repository/category_repository.dart';
 import 'package:flutter_home_work9/repository/image_repository.dart';
-import 'package:flutter_home_work9/repository/recipe_repository.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_home_work9/provider/recipe_model.dart';
 
 class RecipeFormEdit extends StatefulWidget {
   final Recipe recipe;
@@ -26,12 +27,9 @@ class RecipeFormEditState extends State<RecipeFormEdit> {
     selectedImage = widget.recipe.image.assetName;
     selectedCategory = widget.recipe.category;
     titleController = TextEditingController(text: widget.recipe.title);
-    descriptionController =
-        TextEditingController(text: widget.recipe.description);
-    ingredientsController =
-        TextEditingController(text: widget.recipe.ingredients.join('\n - '));
-    instructionsController =
-        TextEditingController(text: widget.recipe.instructions.join('\n - '));
+    descriptionController = TextEditingController(text: widget.recipe.description);
+    ingredientsController = TextEditingController(text: widget.recipe.ingredients.join(', '));
+    instructionsController = TextEditingController(text: widget.recipe.instructions.join(', '));
   }
 
   @override
@@ -44,27 +42,30 @@ class RecipeFormEditState extends State<RecipeFormEdit> {
   }
 
   void _saveEditRecipe() {
-    AssetImage updatedImage = AssetImage(selectedImage);
-    String updatedTitle = titleController.text;
-    String updatedDescription = descriptionController.text;
-    List<String> updatedInstructions = instructionsController.text.split(', ');
-    List<String> updatedIngredients = ingredientsController.text.split(', ');
+    if (titleController.text.isEmpty || descriptionController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Назва та опис не можуть бути порожніми')),
+      );
+      return;
+    }
 
     final updatedRecipe = Recipe(
-      title: updatedTitle,
-      description: updatedDescription,
-      ingredients: updatedIngredients,
-      instructions: updatedInstructions,
+      id: widget.recipe.id,
+      title: titleController.text,
+      description: descriptionController.text,
+      ingredients: ingredientsController.text.split(', '),
+      instructions: instructionsController.text.split(', '),
       category: selectedCategory,
-      image: updatedImage,
+      image: AssetImage(selectedImage),
     );
 
-    RecipeRepository.addRecipe(updatedRecipe);
+    Provider.of<RecipeModel>(context, listen: false).updateRecipe(widget.recipe.id, updatedRecipe);
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Рецепт "$updatedTitle" відредаговано!')),
+      SnackBar(content: Text('Рецепт "${updatedRecipe.title}" оновлено!')),
     );
-    Navigator.pop(context, true);
+
+    Navigator.pop(context);
   }
 
   @override
@@ -104,8 +105,7 @@ class RecipeFormEditState extends State<RecipeFormEdit> {
             const SizedBox(height: 10),
             DropdownButton<String>(
               value: selectedCategory,
-              items:
-                  CategoryRepository.getAllCategories().map((String category) {
+              items: CategoryRepository.getAllCategories().map((String category) {
                 return DropdownMenuItem<String>(
                   value: category,
                   child: Text(category),
@@ -126,21 +126,19 @@ class RecipeFormEditState extends State<RecipeFormEdit> {
               decoration: const InputDecoration(labelText: 'Опис'),
             ),
             TextField(
-              controller: instructionsController,
+              controller: ingredientsController,
               decoration: const InputDecoration(labelText: 'Інгредієнти'),
               maxLines: null,
             ),
             TextField(
-              controller: ingredientsController,
+              controller: instructionsController,
               decoration: const InputDecoration(labelText: 'Інструкції'),
               maxLines: null,
             ),
-            const SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _saveEditRecipe,
-              child: const Text('Save'),
+              child: const Text('Зберегти'),
             ),
           ],
         ),
@@ -148,5 +146,6 @@ class RecipeFormEditState extends State<RecipeFormEdit> {
     );
   }
 }
+
 
 
