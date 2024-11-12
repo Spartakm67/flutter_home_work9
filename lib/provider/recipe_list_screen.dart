@@ -20,7 +20,6 @@ class _RecipeListPageState extends State<RecipeListPage> {
   @override
   void initState() {
     super.initState();
-    // Завантаження рецептів не потрібно, оскільки ми використовуємо Provider
   }
 
   @override
@@ -105,8 +104,8 @@ class _RecipeListPageState extends State<RecipeListPage> {
               context, MaterialPageRoute(builder: (_) => const RecipeForm()));
 
           if (result == true) {
-            // Оновлюємо список рецептів, якщо рецепт був доданий
-            setState(() {}); // Викликаємо setState, щоб оновити UI
+            setState(() {});
+            // recipeModel.addRecipe(result);
           }
         },
         child: const Icon(Icons.add),

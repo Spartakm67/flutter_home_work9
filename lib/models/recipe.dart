@@ -21,3 +21,5 @@ class Recipe {
   })  : id = id ?? const Uuid().v4(),
         image = image ?? const AssetImage('assets/images/pancake_image.png');
 }
+
+
