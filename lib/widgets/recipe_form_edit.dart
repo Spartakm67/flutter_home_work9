@@ -122,10 +122,6 @@ class RecipeFormEditState extends State<RecipeFormEdit> {
               decoration: const InputDecoration(labelText: 'Назва'),
             ),
             TextField(
-              controller: titleController,
-              decoration: const InputDecoration(labelText: 'Назва'),
-            ),
-            TextField(
               controller: descriptionController,
               decoration: const InputDecoration(labelText: 'Опис'),
             ),

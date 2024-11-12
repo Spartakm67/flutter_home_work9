@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_home_work9/screens/recipe_list_screen.dart';
+// import 'package:flutter_home_work9/screens/recipe_list_screen.dart';
+import 'package:flutter_home_work9/provider/recipe_list_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_home_work9/provider/recipe_model.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+    create: (context) => RecipeModel(),
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -12,12 +18,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Flutter HW9',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      // home: BuilderListView(),
       home: const RecipeListPage(),
     );
   }
