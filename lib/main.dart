@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter_home_work9/screens/recipe_list_screen.dart';
 import 'package:flutter_home_work9/provider/recipe_list_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_home_work9/provider/recipe_model.dart';
 
+
 void main() {
-  runApp(ChangeNotifierProvider(
-    create: (context) => RecipeModel(),
-    child: MyApp(),
-  ));
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => RecipeModel(),
+      child: const MyApp(),
+    ),
+  );
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

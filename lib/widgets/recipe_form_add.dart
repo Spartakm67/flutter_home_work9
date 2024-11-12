@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_home_work9/models/recipe.dart';
 import 'package:flutter_home_work9/repository/category_repository.dart';
 import 'package:flutter_home_work9/repository/image_repository.dart';
-import 'package:flutter_home_work9/repository/recipe_repository.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_home_work9/provider/recipe_model.dart';
 
 class RecipeForm extends StatefulWidget {
   const RecipeForm({super.key});
@@ -32,40 +33,6 @@ class RecipeFormState extends State<RecipeForm> {
     super.dispose();
   }
 
-  void _saveRecipe() {
-    if (_formKey.currentState!.validate()) {
-      final recipeTitle = _titleController.text;
-      final recipeDescription = _descriptionController.text;
-      final recipeIngredients = _ingredientController.text.split(',');
-      final recipeInstructions = _instructionController.text.split(',');
-
-      final newRecipe = Recipe(
-        title: recipeTitle,
-        description: recipeDescription,
-        ingredients: recipeIngredients,
-        instructions: recipeInstructions,
-        category: _selectedCategory ?? 'Без категорії',
-        image: _selectedImage != null ? AssetImage(_selectedImage!) : null,
-      );
-
-      RecipeRepository.addRecipe(newRecipe);
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Рецепт "$recipeTitle" збережено!')),
-      );
-
-      _titleController.clear();
-      _descriptionController.clear();
-      _ingredientController.clear();
-      _instructionController.clear();
-      setState(() {
-        _selectedImage = null;
-        _selectedCategory = null;
-      });
-      Navigator.pop(context, true);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,7 +56,6 @@ class RecipeFormState extends State<RecipeForm> {
                           Image.asset(
                             image,
                             width: 30,
-                            // height: 50,
                             fit: BoxFit.cover,
                           ),
                           const SizedBox(width: 10),
@@ -102,12 +68,8 @@ class RecipeFormState extends State<RecipeForm> {
                     _selectedImage = value;
                   }),
                   decoration: const InputDecoration(labelText: 'Зображення'),
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Оберіть зображення';
-                    }
-                    return null;
-                  },
+                  validator: (value) =>
+                      value == null ? 'Оберіть зображення' : null,
                 ),
                 const SizedBox(height: 16.0),
                 DropdownButtonFormField<String>(
@@ -122,55 +84,39 @@ class RecipeFormState extends State<RecipeForm> {
                     _selectedCategory = value;
                   }),
                   decoration: const InputDecoration(labelText: 'Категорія'),
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Оберіть категорію';
-                    }
-                    return null;
-                  },
+                  validator: (value) =>
+                      value == null ? 'Оберіть категорію' : null,
                 ),
                 TextFormField(
                   controller: _titleController,
                   decoration: const InputDecoration(labelText: 'Назва'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Введіть назву рецепту';
-                    }
-                    return null;
-                  },
+                  validator: (value) => value == null || value.isEmpty
+                      ? 'Введіть назву рецепту'
+                      : null,
                 ),
                 const SizedBox(height: 16.0),
                 TextFormField(
                   controller: _descriptionController,
                   decoration: const InputDecoration(labelText: 'Опис'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Введіть опис рецепту';
-                    }
-                    return null;
-                  },
+                  validator: (value) => value == null || value.isEmpty
+                      ? 'Введіть опис рецепту'
+                      : null,
                 ),
                 const SizedBox(height: 16.0),
                 TextFormField(
                   controller: _ingredientController,
                   decoration: const InputDecoration(labelText: 'Інгредієнти'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Введіть склад продукту';
-                    }
-                    return null;
-                  },
+                  validator: (value) => value == null || value.isEmpty
+                      ? 'Введіть склад продукту'
+                      : null,
                 ),
                 const SizedBox(height: 16.0),
                 TextFormField(
                   controller: _instructionController,
                   decoration: const InputDecoration(labelText: 'Інструкції'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Введіть алгоритм приготування';
-                    }
-                    return null;
-                  },
+                  validator: (value) => value == null || value.isEmpty
+                      ? 'Введіть алгоритм приготування'
+                      : null,
                 ),
                 const SizedBox(height: 16.0),
                 ElevatedButton(
@@ -183,5 +129,43 @@ class RecipeFormState extends State<RecipeForm> {
         ),
       ),
     );
+  }
+
+  void _saveRecipe() {
+    if (_formKey.currentState!.validate()) {
+      final recipeTitle = _titleController.text;
+      final recipeDescription = _descriptionController.text;
+      final recipeIngredients = _ingredientController.text.split(',');
+      final recipeInstructions = _instructionController.text.split(',');
+
+      final newRecipe = Recipe(
+        title: recipeTitle,
+        description: recipeDescription,
+        ingredients: recipeIngredients,
+        instructions: recipeInstructions,
+        category: _selectedCategory ?? 'Без категорії',
+        image: _selectedImage != null ? AssetImage(_selectedImage!) : null,
+      );
+
+      Provider.of<RecipeModel>(context, listen: false).addRecipe(newRecipe);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Рецепт "$recipeTitle" збережено!')),
+      );
+
+      _clearForm();
+      Navigator.pop(context);
+    }
+  }
+
+  void _clearForm() {
+    _titleController.clear();
+    _descriptionController.clear();
+    _ingredientController.clear();
+    _instructionController.clear();
+    setState(() {
+      _selectedImage = null;
+      _selectedCategory = null;
+    });
   }
 }
