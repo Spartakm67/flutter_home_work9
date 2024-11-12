@@ -10,7 +10,7 @@ class ImageRepository {
     'assets/images/poppy_pancake.jpg',
     'assets/images/chicken_salad.jpg',
     'assets/images/cold_kvass_soup.jpg',
-  ];
+    ];
   static List<String> getAllImages() {
     return images;
   }

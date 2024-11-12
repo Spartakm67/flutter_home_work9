@@ -37,13 +37,13 @@ class RecipeCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(4),
                   child: Image(
                     image: recipe.image,
-                    width: 60,
-                    height: 60,
+                    width: 65,
+                    height: 75,
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
-              const SizedBox(width: 16),
+              const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
