@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_home_work9/models/recipe.dart';
 import 'package:flutter_home_work9/screens/recipe_detail_screen.dart';
+import 'package:flutter_home_work9/widgets/recipe_form_edit.dart';
 
 class RecipeCard extends StatelessWidget {
   final Recipe recipe;
@@ -64,6 +65,17 @@ class RecipeCard extends StatelessWidget {
                     ),
                   ],
                 ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.edit, color: Colors.blue,),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => RecipeFormEdit(recipe: recipe),
+                    ),
+                  );
+                },
               ),
             ],
           ),

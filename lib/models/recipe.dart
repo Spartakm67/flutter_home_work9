@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Recipe {
-  final ImageProvider image;
+  final AssetImage image;
   final String title;
   final String description;
   final List<String> ingredients;

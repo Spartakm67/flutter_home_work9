@@ -50,4 +50,11 @@ class RecipeRepository {
     final categories = recipes.map((recipe) => recipe.category).toSet().toList();
     return categories;
   }
+
+  // static void updateRecipe(Recipe updatedRecipe) {
+  //   final index = recipes.indexWhere((recipe) => recipe.id == updatedRecipe.id);
+  //   if (index != -1) {
+  //     recipes[index] = updatedRecipe;
+  //   }
+  // }
 }
