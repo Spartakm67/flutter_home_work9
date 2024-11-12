@@ -1,8 +1,23 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_home_work9/models/recipe.dart';
 
 class RecipeRepository {
   static final List<Recipe> recipes = [
     Recipe(
+      image: AssetImage('assets/images/cold_kvass_soup.jpg'),
+      title: 'Борщ',
+      description: 'Традиційний український суп',
+      ingredients: ['Буряк', 'Картопля', 'Морква', 'Цибуля'],
+      instructions: [
+        'Підготувати овочі',
+        'Варити бульйон',
+        'Додати овочі',
+        'Варити до готовності'
+      ],
+      category: 'Обід',
+    ),
+    Recipe(
+      image: AssetImage('assets/images/cold_kvass_soup.jpg'),
       title: 'Борщ',
       description: 'Традиційний український суп',
       ingredients: ['Буряк', 'Картопля', 'Морква', 'Цибуля'],
@@ -47,7 +62,8 @@ class RecipeRepository {
   }
 
   static List<String> getAllCategories() {
-    final categories = recipes.map((recipe) => recipe.category).toSet().toList();
+    final categories =
+        recipes.map((recipe) => recipe.category).toSet().toList();
     return categories;
   }
- }
+}

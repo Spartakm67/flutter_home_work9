@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_home_work9/models/recipe.dart';
 import 'package:flutter_home_work9/screens/recipe_detail_screen.dart';
 import 'package:flutter_home_work9/widgets/recipe_form_edit.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_home_work9/provider/recipe_model.dart';
 
 class RecipeCard extends StatelessWidget {
   final Recipe recipe;
 
-  const RecipeCard({super.key,
+  const RecipeCard({
+    super.key,
     required this.recipe,
   });
 
@@ -30,8 +33,7 @@ class RecipeCard extends StatelessWidget {
             children: [
               Hero(
                 tag: recipe.title,
-                child:
-          ClipRRect(
+                child: ClipRRect(
                   borderRadius: BorderRadius.circular(4),
                   child: Image(
                     image: recipe.image,
@@ -61,13 +63,17 @@ class RecipeCard extends StatelessWidget {
                       recipe.description,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 14, color: Colors.black54),
+                      style:
+                          const TextStyle(fontSize: 14, color: Colors.black54),
                     ),
                   ],
                 ),
               ),
               IconButton(
-                icon: const Icon(Icons.edit, color: Colors.blue,),
+                icon: const Icon(
+                  Icons.edit,
+                  color: Colors.blue,
+                ),
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -77,10 +83,45 @@ class RecipeCard extends StatelessWidget {
                   );
                 },
               ),
+              IconButton(
+                icon: const Icon(Icons.delete_forever, color: Colors.red),
+                onPressed: () => _deleteRecipe(context),
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  void _deleteRecipe(BuildContext context) async {
+    final recipeModel = Provider.of<RecipeModel>(context, listen: false);
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Підтвердження'),
+          content: const Text('Ви впевнені, що хочете видалити цей рецепт?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('Відмінити'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: const Text('Видалити'),
+            ),
+          ],
+        );
+      },
+    );
+    if (shouldDelete == true) {
+      recipeModel.deleteRecipe(recipe.id);
+      scaffoldMessenger.showSnackBar(
+        SnackBar(content: Text('Рецепт "${recipe.title}" видалено!')),
+      );
+    }
   }
 }

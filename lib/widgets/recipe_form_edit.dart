@@ -27,9 +27,12 @@ class RecipeFormEditState extends State<RecipeFormEdit> {
     selectedImage = widget.recipe.image.assetName;
     selectedCategory = widget.recipe.category;
     titleController = TextEditingController(text: widget.recipe.title);
-    descriptionController = TextEditingController(text: widget.recipe.description);
-    ingredientsController = TextEditingController(text: widget.recipe.ingredients.join(', '));
-    instructionsController = TextEditingController(text: widget.recipe.instructions.join(', '));
+    descriptionController =
+        TextEditingController(text: widget.recipe.description);
+    ingredientsController =
+        TextEditingController(text: widget.recipe.ingredients.join(', '));
+    instructionsController =
+        TextEditingController(text: widget.recipe.instructions.join(', '));
   }
 
   @override
@@ -59,7 +62,8 @@ class RecipeFormEditState extends State<RecipeFormEdit> {
       image: AssetImage(selectedImage),
     );
 
-    Provider.of<RecipeModel>(context, listen: false).updateRecipe(widget.recipe.id, updatedRecipe);
+    Provider.of<RecipeModel>(context, listen: false)
+        .updateRecipe(widget.recipe.id, updatedRecipe);
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Рецепт "${updatedRecipe.title}" оновлено!')),
@@ -105,7 +109,8 @@ class RecipeFormEditState extends State<RecipeFormEdit> {
             const SizedBox(height: 10),
             DropdownButton<String>(
               value: selectedCategory,
-              items: CategoryRepository.getAllCategories().map((String category) {
+              items:
+                  CategoryRepository.getAllCategories().map((String category) {
                 return DropdownMenuItem<String>(
                   value: category,
                   child: Text(category),
@@ -146,6 +151,3 @@ class RecipeFormEditState extends State<RecipeFormEdit> {
     );
   }
 }
-
-
-

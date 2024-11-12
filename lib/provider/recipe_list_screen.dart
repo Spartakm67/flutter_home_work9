@@ -5,115 +5,6 @@ import 'package:flutter_home_work9/widgets/recipe_form_add.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_home_work9/provider/recipe_model.dart';
 
-// class RecipeListPage extends StatefulWidget {
-//   const RecipeListPage({super.key});
-//
-//   @override
-//   State<RecipeListPage> createState() => _RecipeListPageState();
-// }
-//
-// class _RecipeListPageState extends State<RecipeListPage> {
-//   TextEditingController searchController = TextEditingController();
-//   String searchRecipe = "";
-//   String? selectedCategory;
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     final recipeModel = Provider.of<RecipeModel>(context);
-//     final allRecipes = recipeModel.recipes;
-//     final filteredRecipes = allRecipes.where((recipe) {
-//       final matchesQuery =
-//       recipe.title.toLowerCase().contains(searchRecipe.toLowerCase());
-//       final matchesCategory =
-//           selectedCategory == null || recipe.category == selectedCategory;
-//       return matchesQuery && matchesCategory;
-//     }).toList();
-//
-//     return Scaffold(
-//         appBar: AppBar(
-//         title: const Text('Рецепти'),
-//     ),
-//     body: Column(
-//     children: [
-//     Padding(
-//     padding: const EdgeInsets.all(8.0),
-//     child: TextField(
-//     controller: searchController,
-//         onChanged: (query) {
-//     setState(() => searchRecipe = query);
-//     },
-//       decoration: InputDecoration(
-//         labelText: 'Пошук за назвою',
-//         border: const OutlineInputBorder(),
-//         suffixIcon: searchRecipe.isNotEmpty
-//             ? IconButton(
-//           icon: const Icon(Icons.clear),
-//           onPressed: () {
-//             setState(() {
-//               searchController.clear();
-//               searchRecipe = '';
-//             });
-//           },
-//         )
-//             : null,
-//       ),
-//     ),
-//     ),
-//     Padding(
-//     padding: const EdgeInsets.symmetric(horizontal: 8.0),
-//       child: DropdownButton<String>(
-//         value: selectedCategory,
-//         hint: const Text("Обрати категорію"),
-//         onChanged: (category) {
-//           setState(() => selectedCategory = category);
-//         },
-//         isExpanded: true,
-//         items: [
-//           const DropdownMenuItem(
-//             value: null,
-//             child: Text("Усі категорії"),
-//           ),
-//           ...RecipeRepository.getAllCategories().map((category) {
-//             return DropdownMenuItem(
-//               value: category,
-//               child: Text(category),
-//             );
-//           }),
-//         ],
-//       ),
-//     ),
-//       Expanded(
-//         child: ListView.builder(
-//           itemCount: filteredRecipes.length,
-//           itemBuilder: (context, index) {
-//             final recipe = filteredRecipes[index];
-//             return RecipeCard(recipe: recipe);
-//           },
-//         ),
-//       ),
-//     ],
-//     ),
-//       floatingActionButton: FloatingActionButton(
-//         onPressed: () async {
-//           final result = await Navigator.push(
-//               context, MaterialPageRoute(builder: (_) => const RecipeForm()));
-//
-//           if (result == true) {
-//             setState(() {});
-//             // recipeModel.addRecipe(result);
-//           }
-//         },
-//         child: const Icon(Icons.add),
-//       ),
-//     );
-//   }
-// }
-
 class RecipeListPage extends StatelessWidget {
   const RecipeListPage({super.key});
 
@@ -138,9 +29,9 @@ class RecipeListPage extends StatelessWidget {
                 border: const OutlineInputBorder(),
                 suffixIcon: recipeModel.searchController.text.isNotEmpty
                     ? IconButton(
-                  icon: const Icon(Icons.clear),
-                  onPressed: recipeModel.clearSearchQuery,
-                )
+                        icon: const Icon(Icons.clear),
+                        onPressed: recipeModel.clearSearchQuery,
+                      )
                     : null,
               ),
             ),
@@ -149,11 +40,9 @@ class RecipeListPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: DropdownButton<String>(
               value: recipeModel.selectedCategory,
-              // value: recipeModel.getAllCategories().contains(recipeModel._selectedCategory)
-              //     ? recipeModel._selectedCategory
-              //     : null,
               hint: const Text("Обрати категорію"),
-              onChanged: (category) => recipeModel.setSelectedCategory(category),
+              onChanged: (category) =>
+                  recipeModel.setSelectedCategory(category),
               isExpanded: true,
               items: [
                 const DropdownMenuItem(
@@ -188,9 +77,6 @@ class RecipeListPage extends StatelessWidget {
           );
           if (result != null && result is Recipe) {
             recipeModel.addRecipe(result);
-
-              Navigator.of(context).pop(); // Повертаємося до попереднього екрану
-
           }
         },
         child: const Icon(Icons.add),

@@ -10,11 +10,15 @@ class RecipeModel extends ChangeNotifier {
 
   List<Recipe> get recipes {
     return _recipes.where((recipe) {
-      final matchesQuery = recipe.title.toLowerCase().contains(searchQuery.toLowerCase());
-      final matchesCategory = _selectedCategory == null || recipe.category == _selectedCategory;
+      final matchesQuery =
+          recipe.title.toLowerCase().contains(searchQuery.toLowerCase());
+      final matchesCategory =
+          _selectedCategory == null || recipe.category == _selectedCategory;
       return matchesQuery && matchesCategory;
     }).toList();
   }
+
+  List<Recipe> get allRecipes => List.unmodifiable(_recipes);
 
   String? get selectedCategory => _selectedCategory;
 
@@ -35,7 +39,7 @@ class RecipeModel extends ChangeNotifier {
   }
 
   void addRecipe(Recipe recipe) {
-    _recipes.add(recipe);   
+    _recipes.add(recipe);
     notifyListeners();
   }
 
@@ -45,6 +49,11 @@ class RecipeModel extends ChangeNotifier {
       _recipes[index] = updatedRecipe;
       notifyListeners();
     }
+  }
+
+  void deleteRecipe(String id) {
+    _recipes.removeWhere((recipe) => recipe.id == id);
+    notifyListeners();
   }
 
   List<Recipe> getRecipesByCategory(String category) {
@@ -61,4 +70,3 @@ class RecipeModel extends ChangeNotifier {
     super.dispose();
   }
 }
-

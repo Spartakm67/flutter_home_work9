@@ -3,7 +3,6 @@ import 'package:flutter_home_work9/provider/recipe_list_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_home_work9/provider/recipe_model.dart';
 
-
 void main() {
   runApp(
     ChangeNotifierProvider(
@@ -12,7 +11,6 @@ void main() {
     ),
   );
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -30,4 +28,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
